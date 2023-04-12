@@ -1,8 +1,7 @@
 import pandas as pd
 from apyori import apriori
 
-
-data = pd.read_csv("donnees/features.csv", skipinitialspace=True)
+data = pd.read_csv("data/features.csv", skipinitialspace=True)
 
 # Group data by profile and anime
 grouped_data = data.groupby(['profile', 'anime_uid'])['score'].sum().unstack().reset_index().fillna(0).set_index('profile')
