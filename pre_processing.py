@@ -46,13 +46,15 @@ features[['episodes']] = features[['episodes']].fillna(value=1)
 # supprimer la ligne si la colonne score et la colonne scores sont vides 
 features = features.dropna(subset=['score', 'scores'], how='all')
 
+# supprimer les doublons dans le dataset
+features = features.drop_duplicates()
+
 # transformer la colonne favorites_anime en liste
-# features["favorites_anime"] = features["favorites_anime"].str.replace("'", "")    
-features["favorites_anime"] = features["favorites_anime"].apply(eval)
+features["favorites_anime"] = features["favorites_anime"].str.replace("'", "")   
+features["favorites_anime"] = features["favorites_anime"].apply(convert_to_list)
 
-# transformer la colonne scores en dictionaire
-features["scores"] = features["scores"].apply(eval)
-
+# # transformer la colonne scores en dictionaire
+# features["scores"] = features["scores"].apply(eval)
 
 print(features.isnull().sum())
 
@@ -61,11 +63,9 @@ features.reindex(columns = ['anime_uid', 'title', 'genre', 'episodes', 'aired', 
 
 # Sauvegarde des données dans un fichier csv
 features.to_csv(data_path + "features.csv", index=False)
-print('preprocessing file created .......')
-print("Taille du dataset:")
 print("------------------")
-print("dataset:\t", len(features))
+print('preprocessing file created .......')
+print("------------------")
+print("Taille du dataset:\t", len(features))
 print("------------------")
 # print(features)
-
-
