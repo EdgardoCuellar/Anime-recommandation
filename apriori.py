@@ -1,6 +1,10 @@
 import pandas as pd
 from apyori import apriori
 
+print("------------------")
+print("Recommandation par l'algorithme a priori.......")
+print("------------------")
+
 data = pd.read_csv("data/features.csv", skipinitialspace=True)
 
 # Group data by profile and anime
@@ -23,3 +27,5 @@ for rule in rules_list:
     consequent = ', '.join(list(rule.ordered_statistics[0].items_add))
     lift = rule.ordered_statistics[0].lift
     print(f'{antecedent} -> {consequent} (lift={lift:.2f})')
+
+print("------------------")
