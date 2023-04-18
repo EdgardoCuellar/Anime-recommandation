@@ -68,7 +68,7 @@ print("------------------")
 
 
 # Initialisation du Dataframe "features" qui va contenir l'ensemble de données d'entrainement
-features = animes[['uid', 'title', 'genre', 'episodes', 'aired']].copy()
+features = animes[['uid', 'genre', 'episodes', 'aired']].copy()
 features = features.rename(columns={'uid': 'anime_uid'}) 
 
 reviews_columns = reviews[['profile', 'anime_uid','score','scores']].copy()
@@ -101,7 +101,7 @@ print(features.isnull().sum())
 
 
 # réorganisation des colonnes
-features.reindex(columns = ['anime_uid', 'title', 'genre', 'episodes', 'aired', 'score', 'scores', 'profile', 'gender', 'favorites_anime'])
+features.reindex(columns = ['anime_uid', 'genre', 'episodes', 'aired', 'score', 'scores', 'profile', 'gender', 'favorites_anime'])
 
 # Sauvegarde des données dans un fichier csv
 features.to_csv(data_path + "features.csv", index=False)
