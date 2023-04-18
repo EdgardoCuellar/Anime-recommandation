@@ -1,4 +1,3 @@
-# User's Most Favorite Animes Recommender
 import pandas as pd
 from collections import Counter
 
@@ -34,8 +33,6 @@ combined_list = [int(anime_id) for anime_id in combined_list]
 # retirer les animes_uid qui ne sont pas dans la liste des animes
 combined_list = [anime_id for anime_id in combined_list if anime_id in animes_ids_list]
 
-# print(combined_list)
-
 # Compter le nombre d'occurrences de chaque anime_id
 counts = Counter(combined_list)
 
@@ -46,7 +43,11 @@ for anime_id, count in counts.items():
 fav_counts = pd.DataFrame.from_dict(favorites_count, orient="index").rename(columns={0:"count"})
 df_fav = fav_counts.sort_values(by="count", ascending=False).head(10)
 
+# renommer la colonne index en anime_uid 
+df_fav.index.name = "anime_uid"
+
 # afficher les titres des animes correspondants aux anime_uid dans le dataframe df_fav
 df_fav["title"] = animes.loc[df_fav.index]["title"]
+
 print(df_fav)
 print("------------------")

@@ -1,5 +1,8 @@
 # la librairie principale pour la gestion des données
 import pandas as pd
+from datetime import datetime
+from dateutil import parser
+import re
 
 # l'emplacement des données sur le disque
 data_path = "data/"
@@ -16,7 +19,43 @@ def convert_to_list(lst):
         return []
     else:
         return list(map(int, lst.split(", ")))
+    
 
+
+# Convertit une chaîne de caractères représentant une date en un objet datetime
+
+    
+def convert_to_date(date_str):
+    if date_str == "Unknown":
+        return None
+    else:
+        if 'to' in date_str:
+            split_date_str = date_str.split(' to ')
+            start_date = datetime.strptime(split_date_str[0], '%b %d, %Y')
+            return start_date.year
+
+        elif ',' in date_str:
+            try:
+                date = datetime.strptime(date_str, "%b %d, %Y")
+            except ValueError:
+                date = datetime.strptime(date_str, "%b, %Y")
+            return date.year
+        else:
+            try:
+                date = parser.parse(date_str)
+                return date.year
+            except ValueError:
+                try:
+                    date_str = date_str.split()[0]
+                    return datetime.strptime(date_str, "%b %d, %Y").year
+                except ValueError:
+                    match = re.search(r'(\w{3} \d{2}, \d{4}) to (\w{3} \d{2}, \d{4})', date_str)
+                    if match:
+                        date_str = match.group(0)
+                        date = datetime.strptime(date_str, "%b %d, %Y")
+                        return date.year
+                    else:
+                        return date_str
 
 
 # Imprimer la taille de chaque table de données
@@ -38,10 +77,11 @@ features = features.merge(reviews_columns, on='anime_uid', how='left')
 profiles_columns = profiles[['profile', 'gender', 'favorites_anime']].copy()
 features = features.merge(profiles_columns, on='profile', how='left')
 
+# Remplacement des valeurs manquantes de la colonne gender par Not Specified
+features['gender'] = features['gender'].fillna(value='Not Specified')
 
-# Remplacement des valeurs manquantes de la colonne gender, episodes par des valeurs par défaut
-features[['gender']] = features[['gender']].fillna(value='Not Specified')
-features[['episodes']] = features[['episodes']].fillna(value=1)
+# Remplir les valeurs manquantes dans la colonne "episodes" par la 1
+features['episodes'] = features['episodes'].fillna(value=1)
 
 # supprimer la ligne si la colonne score et la colonne scores sont vides 
 features = features.dropna(subset=['score', 'scores'], how='all')
@@ -49,14 +89,16 @@ features = features.dropna(subset=['score', 'scores'], how='all')
 # supprimer les doublons dans le dataset
 features = features.drop_duplicates()
 
+# Convertir la colonne "aired" en un objet datetime et en une colonne de date
+# features["aired"] = features["aired"].apply(convert_to_date)
+
 # transformer la colonne favorites_anime en liste
 features["favorites_anime"] = features["favorites_anime"].str.replace("'", "")   
 features["favorites_anime"] = features["favorites_anime"].apply(convert_to_list)
 
-# # transformer la colonne scores en dictionaire
-# features["scores"] = features["scores"].apply(eval)
 
 print(features.isnull().sum())
+
 
 # réorganisation des colonnes
 features.reindex(columns = ['anime_uid', 'genre', 'episodes', 'aired', 'score', 'scores', 'profile', 'gender', 'favorites_anime'])
