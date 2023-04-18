@@ -28,7 +28,7 @@ te_ary = te.fit(items).transform(items)
 df = pd.DataFrame(te_ary, columns=te.columns_)
 
 # Trouver les ensembles d'articles fréquents avec l'algorithme Apriori
-frequent_itemsets = apriori(df, min_support=0.004)
+frequent_itemsets = apriori(df, min_support=0.0033, use_colnames=True)
 
 # Générer les règles d'association à partir des ensembles fréquents
 rules = association_rules(frequent_itemsets, metric='lift', min_threshold=2)
