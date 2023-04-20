@@ -3,7 +3,7 @@ import pickle
 import users_test
 
 # load the rules from a file
-with open('./apriori_rules/rules_sparse.pickle', 'rb') as f:
+with open('./apriori_rules/rules.pickle', 'rb') as f:
     rules = pickle.load(f)
 
 def recommend_anime(watched_anime, N=3):
@@ -21,7 +21,7 @@ def recommend_anime(watched_anime, N=3):
 
 if __name__ == '__main__':
     # Test the recommendation function
-    watched_anime = users_test.USER_2
+    watched_anime = users_test.USER_5
     watched_anime_uids = users_test.get_anime_uids(watched_anime)
     recommended_anime = recommend_anime(watched_anime_uids, N=5)
     
