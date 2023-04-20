@@ -6,7 +6,7 @@ import users_test
 with open('./apriori_rules/rules.pickle', 'rb') as f:
     rules = pickle.load(f)
 
-def recommend_anime(watched_anime, N=10):
+def recommend_anime(watched_anime, N=3):
     relevant_rules = rules[rules['antecedents'].apply(lambda x: len(set(x).intersection(watched_anime)) > 0)]
     relevant_rules = relevant_rules.sort_values(by='lift', ascending=False)
     top_n_rules = relevant_rules.head(N)
@@ -21,7 +21,7 @@ def recommend_anime(watched_anime, N=10):
 
 if __name__ == '__main__':
     # Test the recommendation function
-    watched_anime = users_test.USER_4
+    watched_anime = users_test.USER_5
     watched_anime_uids = users_test.get_anime_uids(watched_anime)
     recommended_anime = recommend_anime(watched_anime_uids, N=5)
     
