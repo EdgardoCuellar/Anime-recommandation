@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container">
+    <h1>Recommandation d'anime</h1>
+    <div class="sub_container">
+      <form method="POST">
+        <div class="choice_zone">
+          {% csrf_token %}
+          <div class="form_div">
+            <h2>Type d'utilisateur</h2>
+            <div class="radio-buttons" class_>
+              <label>
+                <input type="radio" name="user" value="option1" required>User 1
+              </label>
+              <label>
+                <input type="radio" name="user" value="option2" required>User 2
+              </label>
+              <label>
+                <input type="radio" name="user" value="option3" required>User 3
+              </label>
+              <label>
+                <input type="radio" name="user" value="option4" required>User 4
+              </label>
+            </div>
+          </div>
+          <div class="form_div"> 
+            <h2>Algorithme de recommandation</h2>
+            <div class="radio-buttons" class_>
+              <label>
+                <input type="radio" name="algo" value="apriori" required>Apriori
+              </label>
+              <label>
+                <input type="radio" name="algo" value="tf_idf" required>TF-IDF avec similarité de cosinus
+              </label>
+            </div>
+          </div>
+        </div>
+        <button type="submit">Submit</button>
+      </form>
+      
+      <div class="result_zone">
+        <h2>Result</h2>
+        {% if request.method == 'POST' %}
+          <div class="result">
+            <p class="selected-option">Algorithm: {{ algo }}</p>
+            <p class="selected-option">User: {{ user }}</p>
+            <pre>{{ output }}</pre>
+          </div>
+        {% endif %}
+      </div>
+      
+    </div>
+  </div>
+{% endblock %}

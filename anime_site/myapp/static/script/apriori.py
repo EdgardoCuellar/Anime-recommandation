@@ -16,16 +16,3 @@ def recommend_anime(watched_anime, N=3):
     recommended_items.difference_update(watched_anime)
     recommended_items.discard(0)
     return recommended_items
-
-
-
-if __name__ == '__main__':
-    # Test the recommendation function
-    watched_anime = users_test.USER_1
-    watched_anime_uids = users_test.get_anime_uids(watched_anime)
-    recommended_anime = recommend_anime(watched_anime_uids, 10)
-    
-    for anime in recommended_anime:
-        print(users_test.get_anime_title(anime))
-    
-    #users_test.display_anime_info(recommended_anime)

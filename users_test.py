@@ -6,7 +6,7 @@ USER_1 = ['Naruto']
 USER_2 = ['Naruto', 'Death Note', 'Shingeki no Kyojin']
 USER_3 = ['One Piece', 'Bleach', 'Fairy Tail']
 USER_4 = ['Death Note', 'Shingeki no Kyojin']
-USER_5 = ['Erased']
+USER_5 = ['Saiki Kusuo no Î¨-nan: Kanketsu-hen']
 
 def get_anime_title(uid):
     return anime[anime['uid'] == uid]['title'].values[0]
