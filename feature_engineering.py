@@ -22,41 +22,6 @@ def convert_to_list(lst):
     
 
 
-# Convertit une chaîne de caractères représentant une date en un objet datetime
-
-    
-def convert_to_date(date_str):
-    if date_str == "Unknown":
-        return None
-    else:
-        if 'to' in date_str:
-            split_date_str = date_str.split(' to ')
-            start_date = datetime.strptime(split_date_str[0], '%b %d, %Y')
-            return start_date.year
-
-        elif ',' in date_str:
-            try:
-                date = datetime.strptime(date_str, "%b %d, %Y")
-            except ValueError:
-                date = datetime.strptime(date_str, "%b, %Y")
-            return date.year
-        else:
-            try:
-                date = parser.parse(date_str)
-                return date.year
-            except ValueError:
-                try:
-                    date_str = date_str.split()[0]
-                    return datetime.strptime(date_str, "%b %d, %Y").year
-                except ValueError:
-                    match = re.search(r'(\w{3} \d{2}, \d{4}) to (\w{3} \d{2}, \d{4})', date_str)
-                    if match:
-                        date_str = match.group(0)
-                        date = datetime.strptime(date_str, "%b %d, %Y")
-                        return date.year
-                    else:
-                        return date_str
-
 
 # Imprimer la taille de chaque table de données
 print("Taille des données:")
@@ -89,8 +54,16 @@ features = features.dropna(subset=['score', 'scores'], how='all')
 # supprimer les doublons dans le dataset
 features = features.drop_duplicates()
 
-# Convertir la colonne "aired" en un objet datetime et en une colonne de date
-# features["aired"] = features["aired"].apply(convert_to_date)
+# traiter la colonne aired
+def extract_year(aired_str):
+    match = re.search(r'\d{4}', aired_str)
+    if match:
+        return int(match.group())
+    else:
+        return 2021 # Valeur par défaut
+
+# Appliquer la fonction extract_year au dataset
+features['aired'] = features['aired'].apply(extract_year)
 
 # transformer la colonne favorites_anime en liste
 features["favorites_anime"] = features["favorites_anime"].str.replace("'", "")   

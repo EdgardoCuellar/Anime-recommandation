@@ -17,8 +17,6 @@ def recommend_anime(watched_anime, N=3):
     recommended_items.discard(0)
     return recommended_items
 
-
-
 if __name__ == '__main__':
     # Test the recommendation function
     watched_anime = users_test.USER_1

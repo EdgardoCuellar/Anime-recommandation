@@ -1,9 +1,9 @@
 import pandas as pd
 from collections import Counter
 
-print("------------------")
-print('Recommandation par rapport aux animes favorites .......')
-print("------------------")
+print("--------------------------------------------------------")
+print('....Recommandation par rapport aux animes favorites....')
+print("--------------------------------------------------------")
 dataset = pd.read_csv("data/features.csv", skipinitialspace=True) 
 animes = pd.read_csv("data/animes.csv", skipinitialspace=True) 
 
