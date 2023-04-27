@@ -3,11 +3,7 @@ import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import users_test
-
-
-print("------------------------------------------------------------------------------------------------------------------------------------------------")
-print("----Recommandation par la similarité du cosinus en considérant le genre d'animé de l'utilisateur, l'année de sortie et le nombre d'épisode .....")
-print("------------------------------------------------------------------------------------------------------------------------------------------------")
+import sys
 
 dataset = pd.read_csv("data/animes_for_cs.csv", skipinitialspace=True) 
 
@@ -61,8 +57,30 @@ def get_anime_recommendations(user_preferences, anime_features, anime_df, top_n=
 
         return anime_recommendations[["title", "genre", "episodes", "release_year", "similarity"]]
 
+<<<<<<< HEAD:cosine_similarity.py
 # Exemple d'utilisation
 user_preferences = pd.DataFrame(users_test.USER_8['user_genre_preference'], index=[0])
 
 recommendations = get_anime_recommendations(user_preferences, anime_features, dataset, top_n=10)
 print(recommendations)
+=======
+
+
+if __name__ == '__main__':
+    # Test the recommendation function
+    if sys.argv[1] == "USER_1":
+        user_final = users_test.USER_6
+    elif sys.argv[1] == "USER_2":
+        user_final = users_test.USER_7
+    elif sys.argv[1] == "USER_3":
+        user_final = users_test.USER_8
+    else:
+        user_final = users_test.USER_6
+        
+    # Exemple d'utilisation
+    user_preferences = pd.DataFrame(user_final['user_genre_preference'], index=[0])
+
+    recommendations = get_anime_recommendations(user_preferences, anime_features, dataset, top_n=10)
+    # print only the title and similarity columns, and only five recommendations, without the index and header
+    print(recommendations[["title", "similarity"]].head().to_string(index=False, header=False))
+>>>>>>> ffe097bdde0031deb1df9faca2a51b8dcf7d1e06:anime_site/cosine_similarity.py
