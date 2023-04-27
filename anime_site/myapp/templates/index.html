@@ -11,16 +11,16 @@
             <h2>Type d'utilisateur</h2>
             <div class="radio-buttons" class_>
               <label>
-                <input type="radio" name="user" value="option1" required>User 1
+                <input type="radio" name="user" value="USER_1" required>User 1
               </label>
               <label>
-                <input type="radio" name="user" value="option2" required>User 2
+                <input type="radio" name="user" value="USER_2" required>User 2
               </label>
               <label>
-                <input type="radio" name="user" value="option3" required>User 3
+                <input type="radio" name="user" value="USER_3" required>User 3
               </label>
               <label>
-                <input type="radio" name="user" value="option4" required>User 4
+                <input type="radio" name="user" value="USER_4" required>User 4
               </label>
             </div>
           </div>
@@ -43,9 +43,7 @@
         <h2>Result</h2>
         {% if request.method == 'POST' %}
           <div class="result">
-            <p class="selected-option">Algorithm: {{ algo }}</p>
-            <p class="selected-option">User: {{ user }}</p>
-            <pre>{{ output }}</pre>
+            <pre class="output">{{ output }}</pre>
           </div>
         {% endif %}
       </div>

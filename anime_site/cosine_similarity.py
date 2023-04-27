@@ -3,11 +3,7 @@ import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import users_test
-
-
-print("------------------------------------------------------------------------------------------------------------------------------------------------")
-print("----Recommandation par la similarité du cosinus en considérant le genre d'animé de l'utilisateur, l'année de sortie et le nombre d'épisode .....")
-print("------------------------------------------------------------------------------------------------------------------------------------------------")
+import sys
 
 dataset = pd.read_csv("data/animes_for_cs.csv", skipinitialspace=True) 
 
@@ -61,55 +57,22 @@ def get_anime_recommendations(user_preferences, anime_features, anime_df, top_n=
 
         return anime_recommendations[["title", "genre", "episodes", "release_year", "similarity"]]
 
-# Exemple d'utilisation
-user_preferences = pd.DataFrame(users_test.USER_8['user_genre_preference'], index=[0])
-
-recommendations = get_anime_recommendations(user_preferences, anime_features, dataset, top_n=10)
-print(recommendations)
 
 
+if __name__ == '__main__':
+    # Test the recommendation function
+    if sys.argv[1] == "USER_1":
+        user_final = users_test.USER_6
+    elif sys.argv[1] == "USER_2":
+        user_final = users_test.USER_7
+    elif sys.argv[1] == "USER_3":
+        user_final = users_test.USER_8
+    else:
+        user_final = users_test.USER_6
+        
+    # Exemple d'utilisation
+    user_preferences = pd.DataFrame(user_final['user_genre_preference'], index=[0])
 
-
-
-print("---------------------------------------------------------------------------------------------")
-print(".............................................................................................")
-print("---------------------------------------------------------------------------------------------")
-
-# Vectoriser les données textuelles pour la similarité cosinus
-count = CountVectorizer()
-count_matrix = count.fit_transform(dataset["genre"])
-
-# Calculer la similarité cosinus entre les animes
-cosine_sim = cosine_similarity(count_matrix, count_matrix)
-
-# Fonction pour recommander des animes similaires en fonction de l'indice de l'anime
-def recommend_animes(anime_index, cosine_sim=cosine_sim):
-
-    # Récupérer les scores de similarité des animes
-    sim_scores = list(enumerate(cosine_sim[anime_index]))
-
-    # Trier les animes en fonction des scores de similarité
-    sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
-
-    # Sélectionner les 10 animes les plus similaires (en excluant l'anime lui-même)
-    sim_scores = sim_scores[1:11]
-
-    # Récupérer les indices des 10 animes les plus similaires
-    anime_indices = [i[0] for i in sim_scores]
-
-    # Renvoyer les titres des 10 animes les plus similaires
-    return dataset["title"].iloc[anime_indices]
-
-anime_index = 100 
-
-# récuperer le titre de l'anime
-anime_title = dataset["title"][anime_index]
-
-# récupérer les genre de l'anime
-anime_genre = dataset["genre"][anime_index] 
-
-print("Recommandation par la similarité du cosinus en considérant seulement le genre de : ", anime_title)
-print("Les genres sont : ", anime_genre)
-print("........................................................................................................ ")
-# Exemple d'utilisation : recommander des animes similaires à l'anime d'indice 0
-print(recommend_animes(anime_index))
+    recommendations = get_anime_recommendations(user_preferences, anime_features, dataset, top_n=10)
+    # print only the title and similarity columns, and only five recommendations, without the index and header
+    print(recommendations[["title", "similarity"]].head().to_string(index=False, header=False))
